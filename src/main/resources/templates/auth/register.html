@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Form </title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+</head>
+<style>
+    .button {
+        color: #fff;
+        background-color: #004000;
+        border-color: #004000;
+    }
+</style>
+<body style="background: white">
+<div th:replace="~{./fragments/header :: navbar}"></div>
+
+<div class="container">
+    <div class="title">Registration</div>
+
+    <div th:if="${success}">
+        <hr>
+        <br>
+        <h2 class="content" style="text-align: center; color: darkgreen">You're successfully
+            registered.
+            Please login to continue..</h2>
+        <br>
+        <hr>
+        <br>
+    </div>
+
+    <div th:if="${emailAlreadyExists}">
+        <hr>
+        <br>
+        <h2 class="content" style="text-align: center; color: red">Email already exists !!</h2>
+        <br>
+        <hr>
+        <br>
+    </div>
+
+    <div class="content">
+        <form method="post" th:action="@{/register}" th:object="${registerDTO}">
+            <div class="user-details">
+                <div class="input-box">
+                    <span class="details">First Name</span>
+                    <input placeholder="Enter your first name" required th:field="*{firstName}" type="text">
+                    <span style="color: red" class="text-danger" th:errors="*{firstName}"
+                          th:if="${#fields.hasErrors('firstName')}"></span>
+                </div>
+                <div class="input-box">
+                    <span class="details">Last Name</span>
+                    <input placeholder="Enter your last name" required th:field="*{lastName}" type="text">
+                    <span style="color: red" class="text-danger" th:errors="*{lastName}"
+                          th:if="${#fields.hasErrors('lastName')}"></span>
+                </div>
+                <div class="input-box">
+                    <span class="details">Email</span>
+                    <input placeholder="Enter your email" required th:field="*{email}" type="email">
+                    <span style="color: red" class="text-danger" th:errors="*{email}"
+                          th:if="${#fields.hasErrors('email')}"></span>
+                </div>
+                <div class="input-box">
+                    <span class="details">Password</span>
+                    <input placeholder="Enter your password" required th:field="*{password}" type="password">
+                    <span style="color: red" class="text-danger" th:errors="*{password}"
+                          th:if="${#fields.hasErrors('password')}"></span>
+                </div>
+            </div>
+            <div class="button">
+                <input type="submit" value="Register">
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

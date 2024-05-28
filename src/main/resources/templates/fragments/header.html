@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Navbar</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+</head>
+<style>
+    /* Set the body font to a custom font (e.g., "Arial, sans-serif") */
+    body {
+        font-family: math;
+    }
+
+    /* Define a default font for the entire application (e.g., "Roboto, sans-serif") */
+    :root {
+        --default-font: "Roboto, sans-serif";
+    }
+</style>
+<body>
+<nav th:fragment="navbar">
+    <input id="check" type="checkbox">
+    <label class="checkbtn" for="check">
+        <i class="fas fa-bars"></i>
+    </label>
+    <label class="logo">TODO App</label>
+    <ul>
+        <li><a style="background: darkgreen" th:href="@{/}">Home</a></li>
+
+        <!-- NON logged in pages -->
+
+        <li sec:authorize="!isAuthenticated()"><a style="background: darkgreen" th:href="@{/login}">Login</a></li>
+        <li sec:authorize="!isAuthenticated()"><a style="background: darkgreen" th:href="@{/register/form}">Register</a>
+        </li>
+
+        <!-- logged in pages -->
+        <li sec:authorize="isAuthenticated()"><a style="background: red;;" th:href="@{/perform_logout}">Logout</a></li>
+
+
+    </ul>
+</nav>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Login Form</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}"/>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div th:replace="~{./fragments/header :: navbar}"></div>
+<div class="container">
+    <div class="wrapper">
+        <div class="title"><span>Login Form</span></div>
+
+        <form method="POST" th:action="@{/perform_login}">
+            <div class="row" th:if="${param.error}">
+                <p style="text-align: center; color: red; font-size: 22px;">Please check your credentials!</p>
+            </div>
+
+            <div class="row">
+                <i class="fas fa-user"></i>
+                <input id="email" name="email" placeholder="Email or Phone" required type="text">
+            </div>
+            <div class="row">
+                <i class="fas fa-lock"></i>
+                <input id="password" name="password" placeholder="Password" required type="password">
+            </div>
+            <div class="row button">
+                <input type="submit" value="Login">
+            </div>
+            <div class="signup-link">Not a member? <a th:href="@{/register/form}">Signup now</a></div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

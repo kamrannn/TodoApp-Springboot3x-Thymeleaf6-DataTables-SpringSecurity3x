@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    overflow: auto; /* Enable scrolling */
+    background: white !important;
+    background: linear-gradient(135deg, #71b7e6, #9b59b6);
+}
+
+.container {
+    margin: 50px auto; /* Adjust margin for centering */
+    max-width: 1276px !important; /* Set max-width for better readability */
+    width: 100%%; /* Adjust width for smaller screens */
+    background-color: #fff;
+    padding: 25px 30px;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+.container .title {
+    font-size: 25px;
+    font-weight: 500;
+    margin-bottom: 20px; /* Increase margin for better spacing */
+    text-align: center; /* Center the title */
+}
+
+.content form .user-details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px; /* Increase margin for better spacing */
+    gap: 0.1rem;
+}
+
+form .user-details .input-box {
+    width: 100%; /* Adjust width for full-width on smaller screens */
+}
+
+.user-details .input-box input {
+    width: 100%; /* Adjust width for full-width on smaller screens */
+    height: 40px; /* Adjust height for better input appearance */
+    outline: none;
+    font-size: 16px;
+    border-radius: 5px;
+    padding-left: 15px;
+    border: 1px solid #ccc;
+    border-bottom-width: 2px;
+    transition: all 0.3s ease;
+}
+
+.user-details .input-box input:focus,
+.user-details .input-box input:valid {
+    border-color: #9b59b6;
+}
+
+form .button {
+   border-radius: 20px;
+}
+
+form .button input {
+    padding: 10px;
+
+    width: 100%; /* Adjust width for full-width on smaller screens */
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #004000;
+}
+
+form .button input:hover {
+    background: linear-gradient(-135deg, #71b7e6, #9b59b6);
+}
+
+@media (max-width: 584px) {
+    .container {
+        padding: 20px; /* Adjust padding for smaller screens */
+    }
+}
