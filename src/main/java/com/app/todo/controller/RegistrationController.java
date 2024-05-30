@@ -52,12 +52,15 @@ public class RegistrationController {
                 model.addAttribute("emailAlreadyExists", true);
                 bindingResult.rejectValue("email", "", "Email already exists, try any other email");
                 return "auth/register";
-            } else {
+            } else if (response.equals("User registered successfully")) {
                 model.addAttribute("success", true);
                 model.addAttribute("registerDTO", new RegistrationRequest());
+                return "auth/register";
+            } else {
+                model.addAttribute("error", true);
+                model.addAttribute("errorMessage", response);
                 return "auth/register";
             }
         }
     }
-
 }
