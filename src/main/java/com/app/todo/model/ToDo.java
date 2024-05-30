@@ -46,4 +46,11 @@ public class ToDo {
         this.date = date;
         this.status = status;
     }
+
+    public ToDo(Long id, String title, Date date, String status) {
+        this.id = id;
+        this.title = title;
+        this.date = date;
+        this.status = status;
+    }
 }

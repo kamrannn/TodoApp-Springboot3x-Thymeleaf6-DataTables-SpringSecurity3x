@@ -104,7 +104,12 @@ public class ToDoController {
             result.rejectValue("date", "error.date", "Date must be in the future");
             return "EditToDoItem";
         }
-        todo.setStatus(service.getToDoItemById(todo.getId()).getStatus());
+        ToDo existingTodo = service.getToDoItemById(todo.getId());
+        if (existingTodo != null) {
+            todo.setStatus(existingTodo.getStatus());
+        } else {
+            todo.setStatus("Incomplete");
+        }
         if (service.saveOrUpdateToDoItem(todo)) {
             redirectAttributes.addFlashAttribute("message", "Edit Successful");
             return "redirect:/viewToDoList";
