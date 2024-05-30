@@ -28,11 +28,10 @@ public class ToDoService {
         User loggedInUser = utils.getLoggedInUser();
         if (loggedInUser != null && loggedInUser.getRole().equals(Role.USER)) {
             toDoList = toDoRepository.findAllByUserOrderByCreatedAtDesc(loggedInUser);
-            return toDoList;
         } else {
             toDoList = toDoRepository.findAllByOrderByCreatedAtDesc();
-            return toDoList;
         }
+        return toDoList;
     }
 
     public List<ToDo> findToDosByTitleContaining(String title) {
