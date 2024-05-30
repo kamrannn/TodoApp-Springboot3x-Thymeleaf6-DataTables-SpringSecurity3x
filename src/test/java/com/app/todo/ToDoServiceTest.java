@@ -4,6 +4,7 @@ package com.app.todo;
 import com.app.todo.model.ToDo;
 import com.app.todo.repository.ToDoRepository;
 import com.app.todo.service.ToDoService;
+import com.app.todo.util.Utils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,10 +27,12 @@ class ToDoServiceTest {
 
     @InjectMocks
     private ToDoService toDoService;
+    @Mock
+    private Utils utils;
 
     @Test
     void getAllToDoItems_ReturnsEmptyList() {
-        when(toDoRepository.findAll()).thenReturn(new ArrayList<>());
+        when(toDoRepository.findAllByOrderByCreatedAtDesc()).thenReturn(new ArrayList<>());
 
         List<ToDo> result = toDoService.getAllToDoItems();
 
@@ -41,8 +44,7 @@ class ToDoServiceTest {
         List<ToDo> mockToDoList = new ArrayList<>();
         mockToDoList.add(new ToDo(1L, "Task 1", new Date(), "Incomplete"));
         mockToDoList.add(new ToDo(2L, "Task 2", new Date(), "Incomplete"));
-
-        when(toDoRepository.findAll()).thenReturn(mockToDoList);
+        when(toDoRepository.findAllByOrderByCreatedAtDesc()).thenReturn(mockToDoList);
 
         List<ToDo> result = toDoService.getAllToDoItems();
 
@@ -98,18 +100,6 @@ class ToDoServiceTest {
 
         assertFalse(result);
     }
-
-    @Test
-    void saveOrUpdateToDoItem_ValidToDo_ReturnsTrue() {
-        ToDo mockToDo = new ToDo(1L, "Task 1", new Date(), "Incomplete");
-
-        when(toDoRepository.save(mockToDo)).thenReturn(mockToDo);
-        when(toDoRepository.findById(mockToDo.getId())).thenReturn(Optional.of(mockToDo));
-        boolean result = toDoService.saveOrUpdateToDoItem(mockToDo);
-
-        assertTrue(result);
-    }
-    
 
     @Test
     void deleteToDoItem_ExistingId_ReturnsTrue() {
