@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,8 +21,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-    public final BCryptPasswordEncoder encoder;
-    private final Utils utils;
+    private final BCryptPasswordEncoder encoder;
+    public final Utils utils;
     private final UserRepository userRepository;
 
     private final static String USER_NOT_FOUND_MSG =
@@ -42,7 +43,7 @@ public class UserService implements UserDetailsService {
                     encoder.encode(request.getPassword()),
                     Role.USER
             );
-            user.setEnabled(true);
+//            user.setEnabled(true);
             userRepository.save(user);
             return "User registered successfully";
         }
@@ -61,6 +62,33 @@ public class UserService implements UserDetailsService {
             return appUser.get();
         } else {
             throw new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email));
+        }
+    }
+
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public boolean approveUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            return false;
+        } else {
+            user.get().setEnabled(true);
+            userRepository.save(user.get());
+            return true;
+        }
+    }
+
+    public boolean rejectUser(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            return false;
+        } else {
+            user.get().setEnabled(false);
+            userRepository.save(user.get());
+            return true;
         }
     }
 }

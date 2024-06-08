@@ -30,6 +30,7 @@
         <li><a style="background: darkgreen" th:href="@{/}">Home</a></li>
 
         <!-- NON logged in pages -->
+        <li sec:authorize="isAuthenticated() && hasAuthority('ADMIN')"><a style="background: darkgreen" th:href="@{/user/list}">View Users</a></li>
 
         <li sec:authorize="!isAuthenticated()"><a style="background: darkgreen" th:href="@{/login}">Login</a></li>
         <li sec:authorize="!isAuthenticated()"><a style="background: darkgreen" th:href="@{/register/form}">Register</a>
