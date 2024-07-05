@@ -5,6 +5,7 @@ import com.app.todo.model.ToDo;
 import com.app.todo.model.User;
 import com.app.todo.service.ToDoService;
 import com.app.todo.service.UserService;
+import com.app.todo.util.Constants;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,13 +27,14 @@ public class ToDoController {
 
     private final UserService userService;
 
+
     public ToDoController(ToDoService service, UserService userService) {
         this.service = service;
         this.userService = userService;
     }
 
     @GetMapping({"/", "/viewToDoList"})
-    public String viewAllToDoItems(Model model, @ModelAttribute("message") String message) {
+    public String viewAllToDoItems(Model model, @ModelAttribute(Constants.MESSAGE_ATTRIBUTE) String message) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Optional<User> user = userService.findByEmail(username);
@@ -41,7 +43,7 @@ public class ToDoController {
         }
 
         model.addAttribute("list", service.getAllToDoItems());
-        model.addAttribute("message", Objects.requireNonNullElse(message, ""));
+        model.addAttribute(Constants.MESSAGE_ATTRIBUTE, Objects.requireNonNullElse(message, ""));
         return "ViewToDoList";
     }
 
@@ -49,10 +51,10 @@ public class ToDoController {
     @GetMapping("/updateToDoStatus/{id}")
     public String updateToDoStatus(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         if (service.updateStatus(id)) {
-            redirectAttributes.addFlashAttribute("message", "Updated Successfully");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Updated Successfully");
             return "redirect:/viewToDoList";
         }
-        redirectAttributes.addFlashAttribute("message", "Update Failed");
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Update Failed");
         return "redirect:/viewToDoList";
     }
 
@@ -69,8 +71,8 @@ public class ToDoController {
         Date todayDate = simpleDateFormat.parse(simpleDateFormat.format(new Date()));
 
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("message", "Save Failed");
-            return "redirect:/addToDoItem";
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Save Failed");
+            return Constants.REDIRECT_ADD_TO_DO_ITEM;
         } else if (todo.getDate().before(todayDate)) {
             model.addAttribute("todo", todo);
             result.rejectValue("date", "error.date", "Date must be in the future");
@@ -78,11 +80,11 @@ public class ToDoController {
         }
         todo.setStatus("Incomplete");
         if (service.saveOrUpdateToDoItem(todo)) {
-            redirectAttributes.addFlashAttribute("message", "Save Successful");
-            return "redirect:/viewToDoList";
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Save Successful");
+            return Constants.REDIRECT_VIEW_TO_DO_LIST;
         }
-        redirectAttributes.addFlashAttribute("message", "Save Failed");
-        return "redirect:/addToDoItem";
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Save Failed");
+        return Constants.REDIRECT_ADD_TO_DO_ITEM;
     }
 
     @GetMapping("/editToDoItem/{id}")
@@ -97,7 +99,7 @@ public class ToDoController {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         Date todayDate = simpleDateFormat.parse(simpleDateFormat.format(new Date()));
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("message", "Edit Failed");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Edit Failed");
             return "redirect:/editToDoItem/" + todo.getId();
         } else if (todo.getDate().before(todayDate)) {
             model.addAttribute("todo", todo);
@@ -111,29 +113,29 @@ public class ToDoController {
             todo.setStatus("Incomplete");
         }
         if (service.saveOrUpdateToDoItem(todo)) {
-            redirectAttributes.addFlashAttribute("message", "Edit Successful");
-            return "redirect:/viewToDoList";
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Edit Successful");
+            return Constants.REDIRECT_VIEW_TO_DO_LIST;
         }
 
-        redirectAttributes.addFlashAttribute("message", "Edit Failed");
+        redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Edit Failed");
         return "redirect:/editToDoItem/" + todo.getId();
     }
 
     @GetMapping("/deleteToDoItem/{id}")
     public String deleteToDoItem(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         if (service.deleteToDoItem(id)) {
-            redirectAttributes.addFlashAttribute("message", "Delete Successful");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Delete Successful");
         } else {
-            redirectAttributes.addFlashAttribute("message", "Delete Failed");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Delete Failed");
         }
-        return "redirect:/viewToDoList";
+        return Constants.REDIRECT_VIEW_TO_DO_LIST;
     }
 
 
     @GetMapping("/searchToDo")
     public String searchToDos(@RequestParam String title, Model model) {
         model.addAttribute("list", service.findToDosByTitleContaining(title));
-        model.addAttribute("message", "");
+        model.addAttribute(Constants.MESSAGE_ATTRIBUTE, "");
         return "ViewToDoList";
     }
 

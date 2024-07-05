@@ -4,6 +4,7 @@ import com.app.todo.model.ToDo;
 import com.app.todo.model.User;
 import com.app.todo.service.ToDoService;
 import com.app.todo.service.UserService;
+import com.app.todo.util.Constants;
 import com.app.todo.util.Utils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -93,7 +94,7 @@ class ToDoControllerIntegrationTest {
                         .param("status", "Incomplete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/addToDoItem"))
-                .andExpect(flash().attribute("message", "Save Failed"));
+                .andExpect(flash().attribute(Constants.MESSAGE_ATTRIBUTE, "Save Failed"));
     }
 
 
@@ -126,7 +127,7 @@ class ToDoControllerIntegrationTest {
                         .param("status", "Incomplete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/editToDoItem/" + 1))
-                .andExpect(flash().attribute("message", "Edit Failed"));
+                .andExpect(flash().attribute(Constants.MESSAGE_ATTRIBUTE, "Edit Failed"));
     }
 
     @Test
@@ -137,7 +138,7 @@ class ToDoControllerIntegrationTest {
         mockMvc.perform(get("/deleteToDoItem/1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/viewToDoList"))
-                .andExpect(flash().attribute("message", "Delete Successful"));
+                .andExpect(flash().attribute(Constants.MESSAGE_ATTRIBUTE, "Delete Successful"));
     }
 }
 

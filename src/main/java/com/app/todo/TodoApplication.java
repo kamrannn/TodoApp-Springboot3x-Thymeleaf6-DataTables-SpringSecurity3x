@@ -1,39 +1,14 @@
 package com.app.todo;
 
-import com.app.todo.enums.Role;
-import com.app.todo.model.User;
-import com.app.todo.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+//INSERT INTO `todo_app`.`users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `locked`, `password`, `role`) VALUES ('1', 'admin@gmail.com', true, 'admin', 'admin', false, '$2a$10$V594lhL3Pi2UJSYnUgQ4WexyTWvuqujP/xImrRXTyLksbxpMcABKq', 'ADMIN');
+//INSERT INTO `todo_app`.`users` (`id`, `email`, `enabled`, `first_name`, `last_name`, `locked`, `password`, `role`) VALUES ('2', 'kamran@gmail.com', true, 'Kamran', 'Abbasi', false, '$2a$10$usKhqGGzuL2JJ.TLqTNi.eQ4mKO/VzXsFF/y5HUPGKf3Rwb580CMe', 'USER');
 @SpringBootApplication
-public class TodoApplication implements CommandLineRunner {
+public class TodoApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TodoApplication.class, args);
     }
-
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private BCryptPasswordEncoder encoder;
-
-    @Override
-    public void run(String... args) throws Exception {
-        if (userRepository.findByEmail("admin@gmail.com").isEmpty()) {
-            User user = new User("admin", "admin", "admin@gmail.com", encoder.encode("admin"), Role.ADMIN);
-            user.setEnabled(true);
-            userRepository.save(user);
-        }
-
-        if (userRepository.findByEmail("kamran@gmail.com").isEmpty()) {
-            User user = new User("Kamran", "Abbasi", "kamran@gmail.com", encoder.encode("kamran"), Role.USER);
-            user.setEnabled(true);
-            userRepository.save(user);
-        }
-    }
-
 }

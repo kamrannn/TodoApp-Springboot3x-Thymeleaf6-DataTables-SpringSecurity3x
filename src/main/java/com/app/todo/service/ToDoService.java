@@ -1,6 +1,5 @@
 package com.app.todo.service;
 
-import com.app.todo.enums.Role;
 import com.app.todo.model.ToDo;
 import com.app.todo.model.User;
 import com.app.todo.repository.ToDoRepository;
@@ -22,16 +21,8 @@ public class ToDoService {
         this.utils = utils;
     }
 
-    // Retrieve all to-do items from the database
     public List<ToDo> getAllToDoItems() {
-        List<ToDo> toDoList;
-        User loggedInUser = utils.getLoggedInUser();
-        if (loggedInUser != null && loggedInUser.getRole().equals(Role.USER)) {
-            toDoList = toDoRepository.findAllByUserOrderByCreatedAtDesc(loggedInUser);
-        } else {
-            toDoList = toDoRepository.findAllByOrderByCreatedAtDesc();
-        }
-        return toDoList;
+        return toDoRepository.findAllByOrderByCreatedAtDesc();
     }
 
     public List<ToDo> findToDosByTitleContaining(String title) {
@@ -69,11 +60,8 @@ public class ToDoService {
         ToDo updateObj = toDoRepository.save(todo);
 
         // Check if the saved or updated to-do item exists in the database
-        if (getToDoItemById(updateObj.getId()) != null) {
-            return true; // Successfully saved or updated
-        }
-
-        return false; // Failed to save or update
+        return getToDoItemById(updateObj.getId()) != null; // Successfully saved or updated
+// Failed to save or update
     }
 
     // Delete a to-do item from the database by its ID
@@ -82,10 +70,7 @@ public class ToDoService {
         toDoRepository.deleteById(id);
 
         // Check if the to-do item with the specified ID no longer exists in the database
-        if (getToDoItemById(id) == null) {
-            return true; // Successfully deleted
-        }
-
-        return false; // Failed to delete
+        return getToDoItemById(id) == null; // Successfully deleted
+// Failed to delete
     }
 }

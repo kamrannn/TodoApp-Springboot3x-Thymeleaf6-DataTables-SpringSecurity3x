@@ -2,6 +2,7 @@ package com.app.todo.controller;
 
 import com.app.todo.model.User;
 import com.app.todo.service.UserService;
+import com.app.todo.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,14 +23,14 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/list")
-    public String viewAllUsers(Model model, @ModelAttribute("message") String message) {
+    public String viewAllUsers(Model model, @ModelAttribute(Constants.MESSAGE_ATTRIBUTE) String message) {
         List<User> users = userService.findAllUsers();
         User user = userService.utils.getLoggedInUser();
         if (user != null) {
             users.remove(user);
         }
         model.addAttribute("users", users);
-        model.addAttribute("message", Objects.requireNonNullElse(message, ""));
+        model.addAttribute(Constants.MESSAGE_ATTRIBUTE, Objects.requireNonNullElse(message, ""));
         return "user/ViewUsersList";
     }
 
@@ -37,9 +38,9 @@ public class UserController {
     public String approveUser(@PathVariable(name = "id") Long userId, RedirectAttributes redirectAttributes) {
         boolean response = userService.approveUser(userId);
         if (!response) {
-            redirectAttributes.addFlashAttribute("message", "Approval Unsuccessful");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Approval Unsuccessful");
         } else {
-            redirectAttributes.addFlashAttribute("message", "Approval Successful");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Approval Successful");
         }
         return "redirect:/user/list";
     }
@@ -48,9 +49,9 @@ public class UserController {
     public String rejectUser(@PathVariable(name = "id") Long userId, RedirectAttributes redirectAttributes) {
         boolean response = userService.rejectUser(userId);
         if (!response) {
-            redirectAttributes.addFlashAttribute("message", "Rejection Unsuccessful");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Rejection Unsuccessful");
         } else {
-            redirectAttributes.addFlashAttribute("message", "Rejection Successful");
+            redirectAttributes.addFlashAttribute(Constants.MESSAGE_ATTRIBUTE, "Rejection Successful");
         }
         return "redirect:/user/list";
     }

@@ -25,10 +25,10 @@ public class UserService implements UserDetailsService {
     public final Utils utils;
     private final UserRepository userRepository;
 
-    private final static String USER_NOT_FOUND_MSG =
+    private static final String USER_NOT_FOUND_MSG =
             "user with email %s not found";
 
-    private final static String USER_DISABLED_MSG =
+    private static final String USER_DISABLED_MSG =
             "user with email %s is disabled in the database.";
 
     public String register(RegistrationRequest request) {
@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService {
                     encoder.encode(request.getPassword()),
                     Role.USER
             );
-//            user.setEnabled(true);
+            user.setEnabled(true);
             userRepository.save(user);
             return "User registered successfully";
         }

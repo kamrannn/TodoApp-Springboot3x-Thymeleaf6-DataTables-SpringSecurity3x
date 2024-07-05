@@ -3,6 +3,7 @@ package com.app.todo.controller;
 import com.app.todo.dto.RegistrationRequest;
 import com.app.todo.model.User;
 import com.app.todo.service.UserService;
+import com.app.todo.util.Constants;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +22,7 @@ public class RegistrationController {
 
     private final UserService userService;
 
+
     @GetMapping("/login")
     public String login(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -30,7 +32,7 @@ public class RegistrationController {
             return "redirect:/";
         } else {
             model.addAttribute("error", false);
-            return "auth/login";
+            return Constants.AUTH_LOGIN_PAGE;
         }
     }
 
@@ -39,27 +41,27 @@ public class RegistrationController {
         model.addAttribute("registerDTO", new RegistrationRequest());
         model.addAttribute("emailAlreadyExists", false);
         model.addAttribute("success", false);
-        return "auth/register";
+        return Constants.AUTH_REGISTER_PAGE;
     }
 
     @PostMapping("/register")
     public String register(@ModelAttribute(name = "registerDTO") RegistrationRequest registerDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "auth/register";
+            return Constants.AUTH_REGISTER_PAGE;
         } else {
             String response = userService.register(registerDTO);
             if (response.equals("Email already exists")) {
                 model.addAttribute("emailAlreadyExists", true);
                 bindingResult.rejectValue("email", "", "Email already exists, try any other email");
-                return "auth/register";
+                return Constants.AUTH_REGISTER_PAGE;
             } else if (response.equals("User registered successfully")) {
                 model.addAttribute("success", true);
                 model.addAttribute("registerDTO", new RegistrationRequest());
-                return "auth/register";
+                return Constants.AUTH_REGISTER_PAGE;
             } else {
                 model.addAttribute("error", true);
                 model.addAttribute("errorMessage", response);
-                return "auth/register";
+                return Constants.AUTH_REGISTER_PAGE;
             }
         }
     }
